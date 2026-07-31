@@ -13,3 +13,23 @@ export async function updatePrices(stocks){
     }
     
 }
+
+export async function createUser(username, hashedPassword){
+    try{
+        const userExists = await pool.query(
+            `SELECT EXISTS (SELECT 1 FROM users WHERE username = $1);`,
+            [username]
+        );
+        if(userExists.rows[0].exists){
+            throw new Error('Username already taken');
+        }
+
+        await pool.query(
+            `INSERT INTO USERS (username, password_hash) VALUES ($1, $2)`,
+            [username, hashedPassword]
+        );
+
+    } catch(error){
+        console.log(error);
+    }
+}

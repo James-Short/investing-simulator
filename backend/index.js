@@ -1,13 +1,15 @@
 import 'dotenv/config';
-import YahooFinance from 'yahoo-finance2';
-const YF = new YahooFinance({ suppressNotices: ['yahooSurvey'] });
+
+import express from 'express';
+const app = express();
+app.use(express.json());
 
 import { fetchPrices } from './fetchPrices.js';
 
-let result;
-try{
-    result = await YF.quote('COST');
-} catch(error){
-    console.log(error);
-}
+import { userRouter } from './routes/users.js';
+
+app.use('/users', userRouter);
+
 const stuff = await fetchPrices();
+
+app.listen(3000);
