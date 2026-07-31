@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import axios from 'axios';
+import { updatePrices } from './db/queries.js';
 
 
 export async function fetchPrices(){
@@ -15,7 +16,7 @@ export async function fetchPrices(){
                 },
             }
         );
-        console.log(data);
+        await updatePrices(data.trades);
     } catch(error){
         console.error(error);
     }
