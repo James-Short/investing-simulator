@@ -16,4 +16,4 @@ userRouter.post('/createUser', async (req, res) => {
     } catch(error){
         console.log(error);
     }
-})
+});
