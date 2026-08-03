@@ -1,7 +1,7 @@
 import { AreaChart, ResponsiveContainer, XAxis, YAxis, Area } from 'recharts';
 import './ValueGraph.css';
 
-function ValueGraph(){
+function ValueGraph({ height, width }){
     const data = [
         { date: '2026-01-01', price: 142.50 },
         { date: '2026-01-08', price: 145.20 },
@@ -18,8 +18,8 @@ function ValueGraph(){
     ];
 
     return(
-        <ResponsiveContainer>
-            <AreaChart width='95%' height='95%' data={data}>
+        <ResponsiveContainer width={width} height={height}>
+            <AreaChart data={data}>
                 <defs>
                     <linearGradient id='chartGradient' x1='0' y1='0' x2='0' y2='1'>
                         <stop offset='5%' stopColor='#22c55e' stopOpacity={0.15}/>

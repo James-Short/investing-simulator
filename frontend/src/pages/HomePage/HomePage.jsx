@@ -15,7 +15,8 @@ function HomePage(){
                 <StatsBadge height='100%' width='23%' header='OPEN POSITIONS' data='6' dataColor='white' footer='6 tickers'/>
             </div>
             <div className='home-page-graph-container'>
-                <ValueGraph/>
+                <h3>Portfolio Value</h3>
+                <ValueGraph height='80%' width='100%'/>
             </div>
             <div className='home-page-holdings-container'>
                 <h1 className='home-page-holdings-header'>HOLDINGS</h1>
