@@ -3,6 +3,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-evenly;
+    padding-bottom: 1%;
     width: 100%;
     height: 100%;
 }
@@ -13,15 +15,24 @@
     justify-content: space-between;
     width: 70%;
     height: 15%;
-    border: 1px solid white;
+    min-height: 145px;
+    flex-wrap: wrap;
 }
 
 .home-page-graph-container{
+    display: flex;
+    flex-direction: column;
     width: 70%;
     height: 30%;
     background-color: #111114;
     border-radius: 5px;
     border: 3px solid #18181d;
+    min-height: 280px;
+}
+
+.home-page-graph-header{
+    color: #6b7280;
+    margin-left: 2%;
 }
 
 .home-page-holdings-container{

@@ -7,7 +7,6 @@ import './HomePage.css';
 function HomePage(){
     return(
         <div className='home-page'>
-            <Navbar/>
             <div className='home-page-stats-container'>
                 <StatsBadge height='100%' width='23%' header='PORTFOLIO VALUE' data='$25,721.34' dataColor='white' footer='-------'/>
                 <StatsBadge height='100%' width='23%' header='TOTAL P&L' data='+$75.40' dataColor='#20b657' footer={'+0.29%'}/>
@@ -15,7 +14,7 @@ function HomePage(){
                 <StatsBadge height='100%' width='23%' header='OPEN POSITIONS' data='6' dataColor='white' footer='6 tickers'/>
             </div>
             <div className='home-page-graph-container'>
-                <h3>Portfolio Value</h3>
+                <h3 className='home-page-graph-header'>Portfolio Value</h3>
                 <ValueGraph height='80%' width='100%'/>
             </div>
             <div className='home-page-holdings-container'>
