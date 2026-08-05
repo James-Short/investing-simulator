@@ -1,0 +1,130 @@
+
+.explore-page{
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    margin-top: 1%;
+}
+
+.explore-page-center-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 70%;
+    min-height: 0;
+    height: auto;
+    align-self: flex-start;
+}
+
+.explore-page-main-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 73%;
+    height: auto;
+}
+
+.explore-page-search-input{
+    width: 80%;
+    height: 45px;
+    min-height: 40px;
+    border-radius: 5px;
+    background-color: #111114;
+    border: 1px solid #1e1e24;
+    color: #e5e7eb;
+    font-size: 110%;
+    padding-left: 1%;
+    margin-bottom: 3%;
+}
+
+.explore-page-search-input:focus{
+    outline: none;
+    border: 1px solid #22c55e;
+}
+
+.explore-page-stock-table{
+    width: 100%;
+    height: auto;
+    background-color: #111114;
+    border-radius: 5px;
+}
+
+.explore-page-stock-table thead{
+    color: #4b5563;
+    font-size: 110%;
+}
+
+.explore-page-stock-table thead tr{
+    height: 35px;
+}
+
+.explore-page-stock-table tbody{
+    color: #9ca3af;
+    font-size: 120%;
+}
+
+.explore-page-stock-table tbody tr{
+    justify-content: space-between;
+    height: 45px;
+}
+
+.explore-page-stock-watch-button{
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    font-size: 150%;
+    padding: 0px;
+    line-height: 0px;
+    border: 1px solid #2d2d35;
+    background-color: transparent;
+    color: #2d2d35;
+}
+
+.explore-page-stock-watch-button-watched{
+    border: 1px solid #22c55e;
+    color: #22c55e;
+    background-color: #12231b;
+}
+
+.explore-page-stock-watch-button:hover{
+    cursor: pointer;
+    border: 1px solid #22c55e;
+}
+
+.explore-page-stock-watch-button:hover .explore-page-stock-watch-button-span{
+    color: #22c55e;
+}
+
+
+.explore-page-stock-watch-button-span{
+    position: relative;
+    bottom: 4.5%;
+}
+
+
+.explore-page-right-container{
+    width: 25%;
+}
+
+.explore-page-watchlist{
+    display: flex;
+    position: sticky;
+    top: 4%;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    align-self: flex-start;
+    background-color: #111114;
+    border-radius: 5px;
+}
+
+.explore-page-watchlist-header{
+    position: sticky;
+    top: 0;
+    color: #6b7280;
+    font-weight: 200;
+    margin-top: 0;
+}

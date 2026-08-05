@@ -1,8 +1,8 @@
 import './WatchlistStock.css';
 
-function WatchlistStock({ name, price, change }){
+function WatchlistStock({ name, price, change, height, width }){
     return(
-        <div className='watchlist-stock'>
+        <div className='watchlist-stock' style={{ height: height, width: width}}>
             <h3 className='watchlist-stock-header'>META</h3>
             <div className='watchlist-stock-right-container'>
                 <h3 className='watchlist-stock-price'>$612.40</h3>

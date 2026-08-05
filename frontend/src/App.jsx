@@ -3,13 +3,13 @@ import './App.css'
 import AuthPage from './pages/AuthPage/AuthPage.jsx'
 import HomePage from './pages/HomePage/HomePage.jsx'
 import Navbar from './components/Navbar/Navbar.jsx'
-import WatchlistPage from './pages/WatchlistPage/WatchlistPage.jsx'
+import ExplorePage from './pages/ExplorePage/ExplorePage.jsx'
 
 function App() {
   return (
     <>
       <Navbar selected='watchlist'/>
-      <WatchlistPage/>
+      <ExplorePage/>
     </>
   )
 }
