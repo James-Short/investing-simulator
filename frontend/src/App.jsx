@@ -8,8 +8,7 @@ import ExplorePage from './pages/ExplorePage/ExplorePage.jsx'
 function App() {
   return (
     <>
-      <Navbar selected='watchlist'/>
-      <ExplorePage/>
+      <AuthPage/>
     </>
   )
 }

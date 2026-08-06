@@ -1,10 +1,28 @@
 import { useState } from 'react';
+
+import axios from 'axios';
+
 import './AuthPage.css';
 
 function AuthPage(){
     const [selectedSignIn, setSelectedSignIn] = useState(true);
     const [usernameInput, setUsernameInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
+
+    async function submitInfo(){
+        if(usernameInput.length == 0 || passwordInput.length == 0){
+            alert('Username and password fields must be filled in!');
+            return
+        }
+        if(selectedSignIn){
+            const res = await axios.post('http://localhost:8080/users/signIn',
+                {username: usernameInput, password: passwordInput});
+        }
+        else{
+            const res = await axios.post('http://localhost:8080/users/createUser', 
+                {username: usernameInput, password: passwordInput});
+        }
+    }
 
     return(
         <div className="auth-page">
@@ -22,7 +40,7 @@ function AuthPage(){
                     <label className='auth-input-label'>Password</label>
                     <input type="password" className='auth-input' placeholder='•••••••••' onChange={(e) => setPasswordInput(e.target.value)} value={passwordInput}/>
                 </div>
-                <button className='auth-submit-button' onClick={() => alert(passwordInput)}>{selectedSignIn ? 'Sign In' : 'Sign Up'}</button>
+                <button className='auth-submit-button' onClick={() => submitInfo()}>{selectedSignIn ? 'Sign In' : 'Sign Up'}</button>
             </div>
         </div>
     );

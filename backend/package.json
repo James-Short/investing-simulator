@@ -14,6 +14,8 @@
     "@alpacahq/alpaca-trade-api": "^4.0.1",
     "argon2": "^0.45.1",
     "axios": "^1.19.0",
+    "cors": "^2.8.6",
+    "crypto": "^1.0.1",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "pg": "^8.22.0"
