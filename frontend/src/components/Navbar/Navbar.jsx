@@ -1,13 +1,13 @@
 import './Navbar.css';
 
-function Navbar({ selected }){
+function Navbar({ selected, setSelectedTab }){
     return(
         <div className='navbar'>
             <div className='navbar-center'>
                 <div className='navbar-center-left'>
                     <h2 className='navbar-logo'>ALLPAPER</h2>
-                    <button className={`navbar-select-button ${selected === 'portfolio' ? 'navbar-select-button-selected' : ''}`}>PORTFOLIO</button>
-                    <button className={`navbar-select-button ${selected === 'watchlist' ? 'navbar-select-button-selected' : ''}`}>WATCHLIST</button>
+                    <button className={`navbar-select-button ${selected === 'portfolio' ? 'navbar-select-button-selected' : ''}`} onClick={() => setSelectedTab('portfolio')}>PORTFOLIO</button>
+                    <button className={`navbar-select-button ${selected === 'explore' ? 'navbar-select-button-selected' : ''}`} onClick={() => setSelectedTab('explore')}>EXPLORE</button>
                 </div>
                 <button className='navbar-sign-out-button'>SIGN OUT</button>
             </div>

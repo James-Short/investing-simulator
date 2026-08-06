@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import './AuthPage.css';
 
-function AuthPage(){
+function AuthPage({ setSessionStatus }){
     const [selectedSignIn, setSelectedSignIn] = useState(true);
     const [usernameInput, setUsernameInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
@@ -16,11 +16,23 @@ function AuthPage(){
         }
         if(selectedSignIn){
             const res = await axios.post('http://localhost:8080/users/signIn',
-                {username: usernameInput, password: passwordInput});
+                {username: usernameInput, password: passwordInput}, {withCredentials: true, validateStatus: () => true});
+            if(res.status === 202){
+                setSessionStatus('active');
+            }
+            else if(res.status === 401){
+                alert('Username or password is incorrect!');
+            }
         }
         else{
             const res = await axios.post('http://localhost:8080/users/createUser', 
-                {username: usernameInput, password: passwordInput});
+                {username: usernameInput, password: passwordInput}, {withCredentials: true, validateStatus: () => true});
+            if(res.status === 201){
+                setSessionStatus('active');
+            }
+            if(res.status === 401){
+                alert('Username or password is incorrect!');
+            }
         }
     }
 

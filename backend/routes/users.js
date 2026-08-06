@@ -1,7 +1,7 @@
 import express from 'express';
 import argon2 from 'argon2';
 
-import { createCookie, createUser, getUser } from '../db/queries.js';
+import { createCookie, createUser, getUser, verifyCookieExists } from '../db/queries.js';
 
 export const userRouter = express.Router();
 
@@ -50,4 +50,34 @@ userRouter.post('/signIn', async (req, res) => {
     } catch(error){
         console.log(error);
     }
-})
+});
+
+userRouter.get('/verifySession', async (req, res) => {
+    console.log('Got to verify session')
+    try{
+        const userCookie = req.cookies['session'];
+        if(!userCookie){
+            res.status(404).send('Session not found!');
+            return;
+        }
+        const cookieExists = await verifyCookieExists(userCookie);
+        if(cookieExists){
+           res.status(200).send('Session found!');
+           return; 
+        }
+        else{
+            res.status(404).send('Session not found!');
+        }
+
+    } catch(error){
+        console.log(error);
+    }
+});
+
+userRouter.get('/getUserHomepage', async (req, res) => {
+    try{
+        
+    } catch(error){
+        console.log(error);
+    }
+});

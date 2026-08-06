@@ -45,9 +45,6 @@ export async function getUser(username){
             `SELECT * FROM users WHERE username = $1`,
             [username]
         );
-        if(userRow.rows.length == 0){
-            throw new Error('User does not exist.');
-        }
         return userRow.rows[0];
     } catch(error){
         console.log("Error in getUser: ", error);
@@ -69,5 +66,21 @@ export async function createCookie(username){
         return cookieValue;
     } catch(error){
         console.log('Error in createCookie: ', error);
+    }
+}
+
+export async function verifyCookieExists(sessionID){
+    try{
+        const sessionRow = pool.query(
+            `SELECT * from sessions WHERE session_id = $1`,
+            [sessionID]
+        );
+        if(sessionRow.length === 0){
+            return false;
+        }
+        return true;
+    } catch(error){
+        console.log('Error in createCookie: ', error);
+        throw error;
     }
 }
