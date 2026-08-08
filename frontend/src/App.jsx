@@ -17,6 +17,7 @@ function App() {
       const res = await axios.get('http://localhost:8080/users/verifySession', {withCredentials: true, validateStatus: () => true});
       if(res.status === 200){
         setSessionStatus('active');
+        await axios.get('http://localhost:8080/users/getUserHomepage', {withCredentials: true, validateStatus: () => true});
       }
       else{
         setSessionStatus('inactive');

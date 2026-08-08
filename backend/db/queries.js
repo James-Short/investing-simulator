@@ -71,16 +71,45 @@ export async function createCookie(username){
 
 export async function verifyCookieExists(sessionID){
     try{
-        const sessionRow = pool.query(
-            `SELECT * from sessions WHERE session_id = $1`,
+        const sessionRow = await pool.query(
+            `SELECT * FROM sessions WHERE session_id = $1`,
             [sessionID]
         );
-        if(sessionRow.length === 0){
+        if(sessionRow.rows.length === 0){
             return false;
         }
         return true;
     } catch(error){
-        console.log('Error in createCookie: ', error);
+        console.log('Error in verifyCookieExists: ', error);
+        throw error;
+    }
+}
+
+export async function getSessionOwner(cookieValue){
+    try{
+        const ownerID = await pool.query(
+            `SELECT user_id FROM sessions WHERE session_id = $1`,
+            [cookieValue]
+        );
+        if(ownerID.rows.length === 0){
+            return null;
+        }
+        return ownerID.rows[0].user_id;
+    } catch(error){
+        console.log('Error in getSessionOwner: ', error);
+        throw error;
+    }
+}
+
+export async function getUserHoldings(userID){
+    try{
+        const holdings = await pool.query(
+            `SELECT symbol, avg_cost, quantity FROM positions WHERE user_id = $1`,
+            [userID]
+        );
+        return holdings.rows;
+    } catch(error){
+        console.log('Error in getUserHoldings: ', error);
         throw error;
     }
 }
