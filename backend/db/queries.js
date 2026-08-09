@@ -13,9 +13,23 @@ export async function updatePrices(stocks){
             );
         }
     } catch(error){
-        console.log("Error in updatePrices: ", error);
+        console.log('Error in updatePrices: ', error);
+        throw error;
     }
     
+}
+
+export async function getCurrentPrices(){
+    try{
+        const currentPrices = await pool.query(
+            `SELECT DISTINCT ON (symbol) symbol, time, last_trade FROM stocks ORDER BY symbol, last_trade DESC`
+        );
+        return currentPrices.rows;
+
+    } catch(error){
+        console.log('Error in getCurrentPrices', error);
+        throw error;
+    }
 }
 
 export async function createUser(username, hashedPassword){
@@ -34,7 +48,7 @@ export async function createUser(username, hashedPassword){
         );
 
     } catch(error){
-        console.log("Error in createUser: ", error);
+        console.log('Error in createUser: ', error);
         throw error;
     }
 }
@@ -47,7 +61,7 @@ export async function getUser(username){
         );
         return userRow.rows[0];
     } catch(error){
-        console.log("Error in getUser: ", error);
+        console.log('Error in getUser: ', error);
         throw error;
     }
 }
@@ -144,8 +158,7 @@ export async function getUserWatchlist(userID){
             `SELECT watchlist FROM users WHERE id = $1`,
             [userID]
         );
-        return watchlist.rows[0];
-
+        return watchlist.rows[0].watchlist;
     } catch(error){
 
     }

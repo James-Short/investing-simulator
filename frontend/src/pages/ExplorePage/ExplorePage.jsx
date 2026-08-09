@@ -1,7 +1,7 @@
 import WatchlistStock from '../../components/WatchlistStock/WatchlistStock';
 import './ExplorePage.css';
 
-function ExplorePage(){
+function ExplorePage({ userWatchlist=[], currentStocks=[], stockMap=[] }){
     return(
         <div className='explore-page'>
             <div className='explore-page-center-container'>
@@ -19,188 +19,29 @@ function ExplorePage(){
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                                <th>
+                            {currentStocks.map((stock) => (
+                                <tr>
+                                    <th scope='row' style={{ color: 'white' }}>{stock.symbol}</th>
+                                    <th scope='row'>Filler</th>
+                                    <th scope='row' style={{ color: 'white' }}>${stock.last_trade}</th>
+                                    <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
+                                    <th scope='row'>54.2m</th>
+                                    <th>
                                     <button className='explore-page-stock-watch-button explore-page-stock-watch-button-watched'>
                                         <span className='explore-page-stock-watch-button-span'>☆</span>
                                     </button>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
-                            <tr>
-                                <th scope='row' style={{ color: 'white' }}>AAPL</th>
-                                <th scope='row'>Apple Inc.</th>
-                                <th scope='row' style={{ color: 'white' }}>$211.45</th>
-                                <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                <th scope='row'>54.2m</th>
-                            </tr>
+                                </th> 
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
                 <div className='explore-page-right-container'>
                     <h4 className='explore-page-watchlist-header'>WATCHLIST</h4>
                     <div className='explore-page-watchlist'>
-                    <WatchlistStock height='70px' width='100%'/>
-                    <WatchlistStock height='70px' width='100%'/>
-                    <WatchlistStock height='70px' width='100%'/>
+                        {userWatchlist.map(stock => (
+                            <WatchlistStock height='70px' width='100%' name={stock} price={stockMap[stock]}/>
+                        ))}
                     </div>
                 </div>
                 

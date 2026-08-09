@@ -1,7 +1,7 @@
 import express from 'express';
 import argon2 from 'argon2';
 
-import { createCookie, createUser, getCurrentUserValue, getSessionOwner, getUser, getUserHoldings, getUserSnapshots, verifyCookieExists } from '../db/queries.js';
+import { createCookie, createUser, getCurrentPrices, getCurrentUserValue, getSessionOwner, getUser, getUserHoldings, getUserSnapshots, getUserWatchlist, verifyCookieExists } from '../db/queries.js';
 
 export const userRouter = express.Router();
 
@@ -98,8 +98,12 @@ userRouter.get('/getUserHomepage', async (req, res) => {
         const userHoldings = await getUserHoldings(userID);
         const userSnapshots = await getUserSnapshots(userID);
         const currentUserValue = await getCurrentUserValue(userID);
-        console.log(currentUserValue);
-        res.status(200).send(JSON.stringify({ userHoldings: userHoldings, userSnapshots, userSnapshots, currentUserValue: currentUserValue }));
+        const userWatchlist = await getUserWatchlist(userID);
+        const currentStocks = await getCurrentPrices();
+        console.log(userWatchlist);
+        res.status(200).send(JSON.stringify({ userHoldings: userHoldings, userSnapshots, userSnapshots, currentUserValue: currentUserValue, userWatchlist: userWatchlist,
+            currentStocks: currentStocks
+         }));
     } catch(error){
         console.log(error);
     }

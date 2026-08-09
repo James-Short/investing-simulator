@@ -6,14 +6,20 @@ import AuthPage from './pages/AuthPage/AuthPage.jsx'
 import HomePage from './pages/HomePage/HomePage.jsx'
 import Navbar from './components/Navbar/Navbar.jsx'
 import ExplorePage from './pages/ExplorePage/ExplorePage.jsx'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 function App() {
   const [sessionStatus, setSessionStatus] = useState('');
   const [selectedTab, setSelectedTab] = useState('portfolio');
   const [userHoldings, setUserHoldings] = useState([]);
   const [userSnapshots, setUserSnapshots] = useState([]);
+  const [userWatchlist, setUserWatchlist] = useState([]);
   const [currentUserValue, setCurrentUserValue] = useState();
+  const [currentStocks, setCurrentStocks] = useState([]);
+  
+  const stockMap = useMemo(() => {
+    return Object.fromEntries(currentStocks.map(stock => [stock.symbol, stock.last_trade]));
+  }, [currentStocks]);
 
   useEffect(() => {
     async function getStatus(){
@@ -24,6 +30,8 @@ function App() {
         setUserHoldings(homepageData.data.userHoldings)
         setUserSnapshots(homepageData.data.userSnapshots);
         setCurrentUserValue(homepageData.data.currentUserValue);
+        setUserWatchlist(homepageData.data.userWatchlist);
+        setCurrentStocks(homepageData.data.currentStocks);
       }
       else{
         setSessionStatus('inactive');
@@ -41,7 +49,7 @@ function App() {
       {sessionStatus === 'active' ?
         <>
         <Navbar selected={selectedTab} setSelectedTab={(tab) => setSelectedTab(tab)}/>
-          {selectedTab === 'portfolio' ? <HomePage userHoldings={userHoldings} userSnapshots={userSnapshots} currentUserValue={currentUserValue}/>: <ExplorePage/>}</>: <>
+          {selectedTab === 'portfolio' ? <HomePage userHoldings={userHoldings} userSnapshots={userSnapshots} currentUserValue={currentUserValue}/>: <ExplorePage userWatchlist={userWatchlist} currentStocks={currentStocks} stockMap={stockMap}/>}</>: <>
         </>      
       }
       {sessionStatus === 'inactive' ?
