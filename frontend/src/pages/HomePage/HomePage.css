@@ -37,8 +37,7 @@
 
 .home-page-holdings-container{
     width: 70%;
-    height: auto;
-    max-height: 40%;
+    height: 40%;
     overflow-y: auto;
     background-color: #111114;
     border-radius: 5px;

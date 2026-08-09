@@ -1,8 +1,8 @@
 import { AreaChart, ResponsiveContainer, XAxis, YAxis, Area, Label } from 'recharts';
 import './ValueGraph.css';
 
-function ValueGraph({ height, width }){
-    const data = [
+function ValueGraph({ height, width, data=[] }){
+    const data1 = [
         { date: '2026-01-01', price: 142.50 },
         { date: '2026-01-08', price: 145.20 },
         { date: '2026-01-15', price: 139.80 },
@@ -26,9 +26,9 @@ function ValueGraph({ height, width }){
                         <stop offset='95%' stopColor='#2c55e' stopOpacity={0}/>
                     </linearGradient>
                 </defs>
-                <XAxis dataKey='date' axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} interval='preserveStartEnd' fontSize='90%'/>
-                <YAxis dataKey='price' axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} fontSize='90%'/>
-                <Area type='monotone' dataKey='price' stroke='green' strokeWidth={2} fill='url(#chartGradient)'></Area>
+                <XAxis dataKey='recorded_at' axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} interval='preserveStartEnd' fontSize='90%'/>
+                <YAxis dataKey='portfolio_value' axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} fontSize='90%'/>
+                <Area type='monotone' dataKey='portfolio_value' stroke='green' strokeWidth={2} fill='url(#chartGradient)'></Area>
             </AreaChart>
         </ResponsiveContainer>
     );

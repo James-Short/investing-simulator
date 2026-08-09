@@ -113,3 +113,40 @@ export async function getUserHoldings(userID){
         throw error;
     }
 }
+
+export async function getUserSnapshots(userID){
+    try{
+        const snapshots = await pool.query(
+            `SELECT portfolio_value, recorded_at FROM portfolio_snapshots WHERE user_id = $1`,
+            [userID]
+        );
+        return snapshots.rows;
+    } catch(error){
+        console.log('Error in getUserSnapshots: ', error);
+    }
+}
+
+export async function getCurrentUserValue(userID){
+    try{
+        const currentValue = await pool.query(
+            `SELECT portfolio_value FROM portfolio_snapshots WHERE user_id = $1 ORDER BY recorded_at DESC LIMIT 1`,
+            [userID]  
+        );
+        return currentValue.rows[0].portfolio_value;
+    } catch(error){
+        console.log('Error in getCurrentUserValue');
+    }
+}
+
+export async function getUserWatchlist(userID){
+    try{
+        const watchlist = await pool.query(
+            `SELECT watchlist FROM users WHERE id = $1`,
+            [userID]
+        );
+        return watchlist.rows[0];
+
+    } catch(error){
+
+    }
+}

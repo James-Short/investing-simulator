@@ -11,13 +11,19 @@ import { useEffect, useState } from 'react'
 function App() {
   const [sessionStatus, setSessionStatus] = useState('');
   const [selectedTab, setSelectedTab] = useState('portfolio');
+  const [userHoldings, setUserHoldings] = useState([]);
+  const [userSnapshots, setUserSnapshots] = useState([]);
+  const [currentUserValue, setCurrentUserValue] = useState();
 
   useEffect(() => {
     async function getStatus(){
       const res = await axios.get('http://localhost:8080/users/verifySession', {withCredentials: true, validateStatus: () => true});
       if(res.status === 200){
         setSessionStatus('active');
-        await axios.get('http://localhost:8080/users/getUserHomepage', {withCredentials: true, validateStatus: () => true});
+        const homepageData = await axios.get('http://localhost:8080/users/getUserHomepage', {withCredentials: true, validateStatus: () => true});
+        setUserHoldings(homepageData.data.userHoldings)
+        setUserSnapshots(homepageData.data.userSnapshots);
+        setCurrentUserValue(homepageData.data.currentUserValue);
       }
       else{
         setSessionStatus('inactive');
@@ -33,7 +39,10 @@ function App() {
   return (
     <>
       {sessionStatus === 'active' ?
-        <><Navbar selected={selectedTab} setSelectedTab={(tab) => setSelectedTab(tab)}/>{selectedTab === 'portfolio' ? <HomePage />: <ExplorePage/>}</>: <></>      
+        <>
+        <Navbar selected={selectedTab} setSelectedTab={(tab) => setSelectedTab(tab)}/>
+          {selectedTab === 'portfolio' ? <HomePage userHoldings={userHoldings} userSnapshots={userSnapshots} currentUserValue={currentUserValue}/>: <ExplorePage/>}</>: <>
+        </>      
       }
       {sessionStatus === 'inactive' ?
         <AuthPage setSessionStatus={(status) => setSessionStatus(status)}/>: <></>      
