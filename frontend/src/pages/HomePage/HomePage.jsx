@@ -10,7 +10,7 @@ function HomePage({ userHoldings=[], userSnapshots=[], currentUserValue=0 }){
         <div className='home-page'>
             <div className='home-page-stats-container'>
                 <StatsBadge height='100%' width='23%' header='PORTFOLIO VALUE' data={'$' + currentUserValue.toLocaleString()} dataColor='white' footer='-------'/>
-                <StatsBadge height='100%' width='23%' header='TOTAL P&L' data='+$75.40' dataColor='#20b657' footer={'+0.29%'}/>
+                <StatsBadge height='100%' width='23%' header='TOTAL P&L' data={'$' + (currentUserValue - 10000).toLocaleString()} dataColor='#20b657' footer={`${currentUserValue > 10000 ? '+' : ''}` + ((currentUserValue - 10000)/100) + '%'}/>
                 <StatsBadge height='100%' width='23%' header="TODAY'S CHANGE" data='+$312.40' dataColor='#20b657' footer='+0.97%'/>
                 <StatsBadge height='100%' width='23%' header='OPEN POSITIONS' data={Object.keys(userHoldings).length} dataColor='white' footer={`${Object.keys(userHoldings).length} tickers`}/>
             </div>
