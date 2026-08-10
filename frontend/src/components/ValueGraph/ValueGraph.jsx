@@ -1,4 +1,4 @@
-import { AreaChart, ResponsiveContainer, XAxis, YAxis, Area, Label } from 'recharts';
+import { AreaChart, ResponsiveContainer, XAxis, YAxis, Area, Label, Tooltip } from 'recharts';
 import './ValueGraph.css';
 
 function ValueGraph({ height, width, data=[] }){
@@ -29,6 +29,7 @@ function ValueGraph({ height, width, data=[] }){
                 <XAxis dataKey='recorded_at' axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} interval='preserveStartEnd' fontSize='90%'/>
                 <YAxis dataKey='portfolio_value' axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} fontSize='90%'/>
                 <Area type='monotone' dataKey='portfolio_value' stroke='green' strokeWidth={2} fill='url(#chartGradient)'></Area>
+                <Tooltip/>
             </AreaChart>
         </ResponsiveContainer>
     );

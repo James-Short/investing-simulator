@@ -16,10 +16,15 @@ function App() {
   const [userWatchlist, setUserWatchlist] = useState([]);
   const [currentUserValue, setCurrentUserValue] = useState();
   const [currentStocks, setCurrentStocks] = useState([]);
+  const [openingPrices, setOpeningPrices] = useState([]);
   
   const stockMap = useMemo(() => {
     return Object.fromEntries(currentStocks.map(stock => [stock.symbol, stock.last_trade]));
   }, [currentStocks]);
+
+  const openingPriceMap = useMemo(() => {
+    return Object.fromEntries(openingPrices.map(stock => [stock.symbol, stock.last_trade]))
+  });
 
   useEffect(() => {
     async function getStatus(){
@@ -32,6 +37,7 @@ function App() {
         setCurrentUserValue(homepageData.data.currentUserValue);
         setUserWatchlist(homepageData.data.userWatchlist);
         setCurrentStocks(homepageData.data.currentStocks);
+        setOpeningPrices(homepageData.data.openingPrices);
       }
       else{
         setSessionStatus('inactive');
@@ -49,7 +55,8 @@ function App() {
       {sessionStatus === 'active' ?
         <>
         <Navbar selected={selectedTab} setSelectedTab={(tab) => setSelectedTab(tab)}/>
-          {selectedTab === 'portfolio' ? <HomePage userHoldings={userHoldings} userSnapshots={userSnapshots} currentUserValue={currentUserValue}/>: <ExplorePage userWatchlist={userWatchlist} currentStocks={currentStocks} stockMap={stockMap}/>}</>: <>
+          {selectedTab === 'portfolio' ? <HomePage userHoldings={userHoldings} userSnapshots={userSnapshots} currentUserValue={currentUserValue} stockMap={stockMap}/>:
+           <ExplorePage userWatchlist={userWatchlist} currentStocks={currentStocks} stockMap={stockMap}/>}</>: <>
         </>      
       }
       {sessionStatus === 'inactive' ?

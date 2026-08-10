@@ -2,6 +2,7 @@ import express from 'express';
 import argon2 from 'argon2';
 
 import { createCookie, createUser, getCurrentPrices, getCurrentUserValue, getSessionOwner, getUser, getUserHoldings, getUserSnapshots, getUserWatchlist, verifyCookieExists } from '../db/queries.js';
+import { openingPrices } from '../crons/cronJobs.js';
 
 export const userRouter = express.Router();
 
@@ -95,14 +96,14 @@ userRouter.get('/getUserHomepage', async (req, res) => {
             res.status(404).send('Session not found!');
         }
 
+        console.log('Opening Prices: ', openingPrices);
         const userHoldings = await getUserHoldings(userID);
         const userSnapshots = await getUserSnapshots(userID);
         const currentUserValue = await getCurrentUserValue(userID);
         const userWatchlist = await getUserWatchlist(userID);
         const currentStocks = await getCurrentPrices();
-        console.log(userWatchlist);
         res.status(200).send(JSON.stringify({ userHoldings: userHoldings, userSnapshots, userSnapshots, currentUserValue: currentUserValue, userWatchlist: userWatchlist,
-            currentStocks: currentStocks
+            currentStocks: currentStocks, openingPrices: openingPrices
          }));
     } catch(error){
         console.log(error);

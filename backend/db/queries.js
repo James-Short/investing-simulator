@@ -22,7 +22,7 @@ export async function updatePrices(stocks){
 export async function getCurrentPrices(){
     try{
         const currentPrices = await pool.query(
-            `SELECT DISTINCT ON (symbol) symbol, time, last_trade FROM stocks ORDER BY symbol, last_trade DESC`
+            `SELECT DISTINCT ON (symbol) symbol, time, last_trade FROM stocks ORDER BY symbol, time DESC`
         );
         return currentPrices.rows;
 
@@ -160,6 +160,52 @@ export async function getUserWatchlist(userID){
         );
         return watchlist.rows[0].watchlist;
     } catch(error){
+        console.log('Error in getUserWatchlist: ', error);
+    }
+}
 
+export async function updateUserSnapshots(){
+    try{
+        const values = await pool.query(
+            `SELECT
+                u.id,
+                u.balance + COALESCE(SUM(p.quantity * latest.last_trade), 0) AS total_user_value
+            FROM users u
+            LEFT JOIN positions p ON p.user_id = u.id
+            LEFT JOIN(
+                SELECT DISTINCT ON (symbol) symbol, last_trade, time
+                FROM stocks
+                ORDER BY symbol, time DESC
+            ) latest ON latest.symbol = p.symbol
+            GROUP BY u.id, u.balance
+            `
+        );
+        console.log(values.rows);
+        const currentDate = new Date();
+        for(let stock of values.rows){
+            console.log(stock);
+            await pool.query(
+                `INSERT INTO portfolio_snapshots (user_id, portfolio_value, recorded_at) VALUES ($1, $2, $3)`,
+                [stock.id, stock.total_user_value, currentDate]
+            );
+        }
+    } catch(error){
+        console.log('Error in updateUserSnapshots: ', error);
+    }
+}
+
+export async function getOpeningPrices(){
+    try{
+        const openingPrices = await pool.query(
+            `SELECT DISTINCT ON (symbol) symbol, last_trade
+            FROM stocks
+            WHERE time >= CURRENT_DATE
+            ORDER BY symbol, time            
+            `
+        );
+        console.log(openingPrices);
+        return openingPrices.rows;
+    } catch(error){
+        console.log('Error in getOpeningPrices: ', error);
     }
 }

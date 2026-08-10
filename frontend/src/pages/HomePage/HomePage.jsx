@@ -5,7 +5,7 @@ import ValueGraph from '../../components/ValueGraph/ValueGraph';
 import './HomePage.css';
 
 
-function HomePage({ userHoldings=[], userSnapshots=[], currentUserValue=0 }){
+function HomePage({ userHoldings=[], userSnapshots=[], currentUserValue=0, stockMap=[] }){
     return(
         <div className='home-page'>
             <div className='home-page-stats-container'>
@@ -40,10 +40,10 @@ function HomePage({ userHoldings=[], userSnapshots=[], currentUserValue=0 }){
                                 <th scope='row'>Filler</th>
                                 <th scope='row'>{holding.quantity}</th>
                                 <th scope='row'>${holding.avg_cost}</th>
-                                <th scope='row' style={{color: 'white'}}>Filler</th>
-                                <th scope='row' style={{color: 'white'}}>${(holding.quantity * holding.avg_cost).toLocaleString()}</th>
-                                <th scope='row'>+$521.50</th>
-                                <th scope='row'>+21.38%</th>
+                                <th scope='row' style={{color: 'white'}}>${stockMap[holding.symbol]}</th>
+                                <th scope='row' style={{color: 'white'}}>${(holding.quantity * stockMap[holding.symbol]).toLocaleString()}</th>
+                                <th scope='row'>+{((stockMap[holding.symbol] - holding.avg_cost) * holding.quantity).toLocaleString()}</th>
+                                <th scope='row'>{(((stockMap[holding.symbol] - holding.avg_cost)/holding.avg_cost) * 100).toLocaleString()}%</th>
                             </tr>
                         ))}
                     </tbody>
