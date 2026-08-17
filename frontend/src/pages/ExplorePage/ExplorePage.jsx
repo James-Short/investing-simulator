@@ -1,7 +1,7 @@
 import WatchlistStock from '../../components/WatchlistStock/WatchlistStock';
 import './ExplorePage.css';
 
-function ExplorePage({ userWatchlist=[], currentStocks=[], stockMap=[] }){
+function ExplorePage({ userWatchlist=[], currentStocks=[], stockMap=[], openingPriceMap=[] }){
     return(
         <div className='explore-page'>
             <div className='explore-page-center-container'>
@@ -19,20 +19,24 @@ function ExplorePage({ userWatchlist=[], currentStocks=[], stockMap=[] }){
                             </tr>
                         </thead>
                         <tbody>
-                            {currentStocks.map((stock) => (
-                                <tr>
-                                    <th scope='row' style={{ color: 'white' }}>{stock.symbol}</th>
-                                    <th scope='row'>Filler</th>
-                                    <th scope='row' style={{ color: 'white' }}>${stock.last_trade}</th>
-                                    <th scope='row' style={{ color: '#22c55e' }}>+0.87%</th>
-                                    <th scope='row'>54.2m</th>
-                                    <th>
-                                    <button className='explore-page-stock-watch-button explore-page-stock-watch-button-watched'>
-                                        <span className='explore-page-stock-watch-button-span'>☆</span>
-                                    </button>
-                                </th> 
-                                </tr>
-                            ))}
+                            {currentStocks.map((stock) => {
+                                const isPositive = stock.last_trade >= openingPriceMap[stock.symbol];
+                                return(
+                                    <tr>
+                                        <th scope='row' style={{ color: 'white' }}>{stock.symbol}</th>
+                                        <th scope='row'>Filler</th>
+                                        <th scope='row' style={{ color: 'white' }}>${(stock.last_trade).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</th>
+                                        <th scope='row' style={{ color: `${isPositive ? '#20b657' : 'tomato'}` }}>{((stock.last_trade - openingPriceMap[stock.symbol]) * 100 / openingPriceMap[stock.symbol]).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%</th>
+                                        <th scope='row'>54.2m</th>
+                                        <th>
+                                            <button className='explore-page-stock-watch-button explore-page-stock-watch-button-watched'>
+                                                <span className='explore-page-stock-watch-button-span'>☆</span>
+                                            </button>
+                                        </th>
+                                
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>
@@ -40,7 +44,7 @@ function ExplorePage({ userWatchlist=[], currentStocks=[], stockMap=[] }){
                     <h4 className='explore-page-watchlist-header'>WATCHLIST</h4>
                     <div className='explore-page-watchlist'>
                         {userWatchlist.map(stock => (
-                            <WatchlistStock height='70px' width='100%' name={stock} price={stockMap[stock]}/>
+                            <WatchlistStock height='70px' width='100%' name={stock} price={stockMap[stock]} openingPriceMap={openingPriceMap}/>
                         ))}
                     </div>
                 </div>

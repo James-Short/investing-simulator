@@ -12,7 +12,7 @@
 .home-page-stats-container{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
     width: 70%;
     height: 15%;
     min-height: 145px;

@@ -96,7 +96,6 @@ userRouter.get('/getUserHomepage', async (req, res) => {
             res.status(404).send('Session not found!');
         }
 
-        console.log('Opening Prices: ', openingPrices);
         const userHoldings = await getUserHoldings(userID);
         const userSnapshots = await getUserSnapshots(userID);
         const currentUserValue = await getCurrentUserValue(userID);

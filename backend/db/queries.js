@@ -3,8 +3,6 @@ import { pool } from './db.js';
 import { randomUUID } from 'crypto';
 
 export async function updatePrices(stocks){
-    console.log(stocks);
-    return;
     try{
         for(const [symbol, trade] of Object.entries(stocks)){
             await pool.query(
@@ -46,6 +44,7 @@ export async function createUser(username, hashedPassword){
             `INSERT INTO users (username, password_hash) VALUES ($1, $2)`,
             [username, hashedPassword]
         );
+        await updateInitialSnapshot();
 
     } catch(error){
         console.log('Error in createUser: ', error);
@@ -148,7 +147,7 @@ export async function getCurrentUserValue(userID){
         );
         return currentValue.rows[0].portfolio_value;
     } catch(error){
-        console.log('Error in getCurrentUserValue');
+        console.log('Error in getCurrentUserValue', error);
     }
 }
 
@@ -180,10 +179,8 @@ export async function updateUserSnapshots(){
             GROUP BY u.id, u.balance
             `
         );
-        console.log(values.rows);
         const currentDate = new Date();
         for(let stock of values.rows){
-            console.log(stock);
             await pool.query(
                 `INSERT INTO portfolio_snapshots (user_id, portfolio_value, recorded_at) VALUES ($1, $2, $3)`,
                 [stock.id, stock.total_user_value, currentDate]
@@ -191,6 +188,18 @@ export async function updateUserSnapshots(){
         }
     } catch(error){
         console.log('Error in updateUserSnapshots: ', error);
+    }
+}
+
+export async function updateInitialSnapshot(userID){
+    try{
+        const currentDate = new Date();
+        await pool.query(
+            `INSERT INTO portfolio_snapshots (user_id, portfolio_value, recorded_at) VALUES ($1, $2, $3)`,
+            [userID, 10_000, currentDate]
+        );
+    } catch(error){
+        console.log('Error in updateInitialSnapshot: ', error);
     }
 }
 
@@ -203,7 +212,6 @@ export async function getOpeningPrices(){
             ORDER BY symbol, time            
             `
         );
-        console.log(openingPrices);
         return openingPrices.rows;
     } catch(error){
         console.log('Error in getOpeningPrices: ', error);

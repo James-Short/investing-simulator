@@ -17,6 +17,8 @@ function ValueGraph({ height, width, data=[] }){
         { date: '2026-03-19', price: 170.90 },
     ];
 
+    const formatter = new Intl.NumberFormat('en-US', {notation: 'compact', compactDisplay: 'short'})
+
     return(
         <ResponsiveContainer width={width} height={height}>
             <AreaChart data={data}>
@@ -26,8 +28,13 @@ function ValueGraph({ height, width, data=[] }){
                         <stop offset='95%' stopColor='#2c55e' stopOpacity={0}/>
                     </linearGradient>
                 </defs>
-                <XAxis dataKey='recorded_at' axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} interval='preserveStartEnd' fontSize='90%'/>
-                <YAxis dataKey='portfolio_value' axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} fontSize='90%'/>
+                <XAxis dataKey='recorded_at' axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} interval='preserveStartEnd' fontSize='90%'
+                    tickFormatter={(date) => new Date(date).toLocaleString('en-US', {month: 'short', day: 'numeric'})}
+                />
+                <YAxis dataKey='portfolio_value' axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} fontSize='90%' 
+                    domain={[(dataMin) => Math.floor(dataMin * 0.98), (dataMax) => Math.ceil(dataMax * 1.02)]}
+                    tickFormatter={(value) => '$' + formatter.format(value)}
+                />
                 <Area type='monotone' dataKey='portfolio_value' stroke='green' strokeWidth={2} fill='url(#chartGradient)'></Area>
                 <Tooltip/>
             </AreaChart>

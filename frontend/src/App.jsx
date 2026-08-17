@@ -55,8 +55,8 @@ function App() {
       {sessionStatus === 'active' ?
         <>
         <Navbar selected={selectedTab} setSelectedTab={(tab) => setSelectedTab(tab)}/>
-          {selectedTab === 'portfolio' ? <HomePage userHoldings={userHoldings} userSnapshots={userSnapshots} currentUserValue={currentUserValue} stockMap={stockMap}/>:
-           <ExplorePage userWatchlist={userWatchlist} currentStocks={currentStocks} stockMap={stockMap}/>}</>: <>
+          {selectedTab === 'portfolio' ? <HomePage userHoldings={userHoldings} userSnapshots={userSnapshots} currentUserValue={currentUserValue} stockMap={stockMap} openingPriceMap={openingPriceMap}/>:
+           <ExplorePage userWatchlist={userWatchlist} currentStocks={currentStocks} stockMap={stockMap} openingPriceMap={openingPriceMap}/>}</>: <>
         </>      
       }
       {sessionStatus === 'inactive' ?
