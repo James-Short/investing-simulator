@@ -17,6 +17,14 @@ import { getSessionOwner, updateUserSnapshots } from './db/queries.js';
 
 app.use('/users', userRouter);
 
+/*
+    It looks like cron jobs are causing delay when server runs.
+    I'll have to figure out the best solution for that later.
+    In the meantime, I'm just throwing this log statement out
+    so I can see when the backend is ready for requests.
+*/
+console.log('Running');
+
 //const stuff = await fetchPrices();
 await getSessionOwner();
 await updateUserSnapshots();

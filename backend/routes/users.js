@@ -1,7 +1,7 @@
 import express from 'express';
 import argon2 from 'argon2';
 
-import { createCookie, createUser, getCurrentPrices, getCurrentUserValue, getSessionOwner, getUser, getUserHoldings, getUserSnapshots, getUserWatchlist, verifyCookieExists } from '../db/queries.js';
+import { createCookie, createUser, createUserPosition, getCurrentIndividualPrice, getCurrentPrices, getCurrentUserBalance, getCurrentUserValue, getSessionOwner, getUser, getUserHoldings, getUserSnapshots, getUserWatchlist, subtractFromUserBalance, verifyCookieExists } from '../db/queries.js';
 import { openingPrices } from '../crons/cronJobs.js';
 
 export const userRouter = express.Router();
@@ -104,6 +104,54 @@ userRouter.get('/getUserHomepage', async (req, res) => {
         res.status(200).send(JSON.stringify({ userHoldings: userHoldings, userSnapshots, userSnapshots, currentUserValue: currentUserValue, userWatchlist: userWatchlist,
             currentStocks: currentStocks, openingPrices: openingPrices
          }));
+    } catch(error){
+        console.log(error);
+    }
+});
+
+userRouter.post('/buyStock', async (req, res) => {
+    console.log('Buy stock')
+    try{
+        const userCookie = req.cookies['session'];
+        if(!userCookie){
+            res.status(404).send('Session not found!');
+            return;
+        }
+        const cookieExists = await verifyCookieExists(userCookie);
+        if(!cookieExists){
+            res.status(404).send('Session not found!');
+            return;
+        }
+        const userID = await getSessionOwner(userCookie);
+        if(!userID){
+            res.status(404).send('Session not found!');
+            return;
+        }
+
+        const { symbol, quantity } = req.body;
+        console.log(symbol, quantity);
+        if(!symbol || !quantity){
+            res.status(400).send('Missing required information.');
+            return;
+        }
+        const userBalance = await getCurrentUserBalance(userID);
+        const stockPrice = await getCurrentIndividualPrice(symbol);
+
+        if(!userBalance || !stockPrice){
+            res.status(404).send('Could not find requested information.');
+            return;
+        }
+
+        if(stockPrice * quantity > userBalance){
+            res.status(422).send('Insufficient balance for requested purchase.');
+            return;
+        }
+        
+        await subtractFromUserBalance(userID, stockPrice * quantity);
+        await createUserPosition(userID, symbol, quantity);
+
+
+
     } catch(error){
         console.log(error);
     }

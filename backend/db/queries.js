@@ -30,6 +30,18 @@ export async function getCurrentPrices(){
     }
 }
 
+export async function getCurrentIndividualPrice(symbol){
+    try{
+        const currentPrice = await pool.query(
+            `SELECT last_trade FROM stocks WHERE symbol = $1 ORDER BY time DESC LIMIT 1`,
+            [symbol]
+        );
+        return currentPrice.rows[0].last_trade;
+    } catch(error){
+
+    }
+}
+
 export async function createUser(username, hashedPassword){
     try{
         const userExists = await pool.query(
@@ -215,5 +227,58 @@ export async function getOpeningPrices(){
         return openingPrices.rows;
     } catch(error){
         console.log('Error in getOpeningPrices: ', error);
+    }
+}
+
+export async function getCurrentUserBalance(userID){
+    try{
+        const userBalance = await pool.query(
+            `SELECT balance FROM users WHERE id = $1`,
+            [userID]
+        );
+        return userBalance.rows[0];
+    } catch(error){
+        console.log('Error in getCurrentUserBalance: ', error);
+        throw error;
+    }
+}
+
+export async function subtractFromUserBalance(userID, amount){
+    try{
+        await pool.query(
+            `UPDATE users SET balance = balance - $1 WHERE id = $2`,
+            [amount, userID]
+        );
+    } catch(error){
+        console.log('Error in subtractFromUserBalance: ', error);
+        throw error;
+    }
+}
+
+export async function createUserPosition(userID, symbol, quantity){
+    try{
+        const existingPosition = await pool.query(
+            `SELECT quantity, avg_cost FROM positions WHERE user_id = $1 AND symbol = $2`,
+            [userID, symbol]
+        );
+        const currentPrice = await getCurrentIndividualPrice(symbol);
+        if(existingPosition.rows.length > 0){
+            const oldTotal = Number(existingPosition.rows[0].quantity) * Number(existingPosition.rows[0].avg_cost);
+            const totalQuantity = Number(existingPosition.rows[0].quantity) + Number(quantity)
+            const newAvg = (Number(currentPrice) * Number(quantity) + Number(oldTotal))/ Number(totalQuantity);
+            await pool.query(
+                `UPDATE positions SET quantity = $1, avg_cost = $2 WHERE user_id = $3 AND symbol = $4`,
+                [totalQuantity, newAvg, userID, symbol]
+            );
+        }
+        else{
+            await pool.query(
+                `INSERT INTO positions (user_id, symbol, quantity, avg_cost) VALUES ($1, $2, $3, $4)`,
+                [userID, symbol, quantity, currentPrice]
+            );
+        }
+    } catch(error){
+        console.log('Error in createUserPosition: ', error);
+        throw error;
     }
 }
