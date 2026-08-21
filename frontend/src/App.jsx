@@ -32,8 +32,8 @@ function App() {
       if(res.status === 200){
         setSessionStatus('active');
         const homepageData = await axios.get('http://localhost:8080/users/getUserHomepage', {withCredentials: true, validateStatus: () => true});
-        const test = await axios.post('http://localhost:8080/users/buyStock', {
-          symbol: 'AAPL',
+        const test = await axios.post('http://localhost:8080/users/sellStock', {
+          symbol: 'GOOGL',
           quantity: '1'
         }, {withCredentials: true, validateStatus: () => true});
         setUserHoldings(homepageData.data.userHoldings)

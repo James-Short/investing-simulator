@@ -243,6 +243,18 @@ export async function getCurrentUserBalance(userID){
     }
 }
 
+export async function addToUserBalance(userID, amount){
+    try{
+        await pool.query(
+            `UPDATE users SET balance = balance + $1 WHERE id = $2`,
+            [amount, userID]
+        );
+    } catch(error){
+        console.log('Error in addToUserBalance: ', error);
+        throw error;
+    }
+}
+
 export async function subtractFromUserBalance(userID, amount){
     try{
         await pool.query(
@@ -262,7 +274,7 @@ export async function createUserPosition(userID, symbol, quantity){
             [userID, symbol]
         );
         const currentPrice = await getCurrentIndividualPrice(symbol);
-        if(existingPosition.rows.length > 0){
+        if(existingPosition.rowCount > 0){
             const oldTotal = Number(existingPosition.rows[0].quantity) * Number(existingPosition.rows[0].avg_cost);
             const totalQuantity = Number(existingPosition.rows[0].quantity) + Number(quantity)
             const newAvg = (Number(currentPrice) * Number(quantity) + Number(oldTotal))/ Number(totalQuantity);
@@ -279,6 +291,37 @@ export async function createUserPosition(userID, symbol, quantity){
         }
     } catch(error){
         console.log('Error in createUserPosition: ', error);
+        throw error;
+    }
+}
+
+export async function deleteUserPosition(userID, symbol, quantity){
+    try{
+        const existingPosition = await pool.query(
+            `SELECT quantity FROM positions WHERE user_id = $1 AND symbol = $2`,
+            [userID, symbol]
+        );
+        if(existingPosition.rowCount === 0){
+            throw new Error('User does not own the stock they are attempting to sell!');
+        }
+        else if(Number(existingPosition.rows[0].quantity) < Number(quantity)){
+            throw new Error('User owns fewer shares than they are attempting to sell!');
+        }
+        else if(Number(existingPosition.rows[0].quantity) === Number(quantity)){
+            await pool.query(
+                `DELETE FROM positions WHERE user_id = $1 AND symbol = $2`,
+                [userID, symbol]
+            );
+        }
+        else{
+            await pool.query(
+                `UPDATE positions SET quantity = $1 WHERE user_id = $2 AND symbol = $3`,
+                [Number(existingPosition.rows[0].quantity) - Number(quantity), userID, symbol]
+            );
+        }
+
+    } catch(error){
+        console.log('Error in deleteUserPosition: ', error);
         throw error;
     }
 }
