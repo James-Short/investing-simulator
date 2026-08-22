@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage/HomePage.jsx'
 import Navbar from './components/Navbar/Navbar.jsx'
 import ExplorePage from './pages/ExplorePage/ExplorePage.jsx'
 import { useEffect, useMemo, useState } from 'react'
+import TradePage from './pages/TradePage/TradePage.jsx'
 
 function App() {
   const [sessionStatus, setSessionStatus] = useState('');
@@ -32,10 +33,6 @@ function App() {
       if(res.status === 200){
         setSessionStatus('active');
         const homepageData = await axios.get('http://localhost:8080/users/getUserHomepage', {withCredentials: true, validateStatus: () => true});
-        const test = await axios.post('http://localhost:8080/users/sellStock', {
-          symbol: 'GOOGL',
-          quantity: '1'
-        }, {withCredentials: true, validateStatus: () => true});
         setUserHoldings(homepageData.data.userHoldings)
         setUserSnapshots(homepageData.data.userSnapshots);
         setCurrentUserValue(homepageData.data.currentUserValue);
@@ -58,9 +55,9 @@ function App() {
     <>
       {sessionStatus === 'active' ?
         <>
-        <Navbar selected={selectedTab} setSelectedTab={(tab) => setSelectedTab(tab)}/>
-          {selectedTab === 'portfolio' ? <HomePage userHoldings={userHoldings} userSnapshots={userSnapshots} currentUserValue={currentUserValue} stockMap={stockMap} openingPriceMap={openingPriceMap}/>:
-           <ExplorePage userWatchlist={userWatchlist} currentStocks={currentStocks} stockMap={stockMap} openingPriceMap={openingPriceMap}/>}</>: <>
+          <Navbar selected={selectedTab} setSelectedTab={(tab) => setSelectedTab(tab)}/>
+            {selectedTab === 'portfolio' ? <HomePage userHoldings={userHoldings} userSnapshots={userSnapshots} currentUserValue={currentUserValue} stockMap={stockMap} openingPriceMap={openingPriceMap}/>:
+            selectedTab === 'explore' ? <ExplorePage userWatchlist={userWatchlist} currentStocks={currentStocks} stockMap={stockMap} openingPriceMap={openingPriceMap}/> : <TradePage/>}</>: <>
         </>      
       }
       {sessionStatus === 'inactive' ?

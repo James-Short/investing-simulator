@@ -1,0 +1,89 @@
+
+.trade-page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.trade-page-order-header{
+    color: rgb(107, 114, 128);
+    width: 55%;
+    top: 0;
+    left: 0;
+}
+
+.trade-page-order-container{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-evenly;
+    width: 55%;
+    height: 15%;
+    background-color: #111114;
+    border: 1px solid #1e1e24;
+    border-radius: 5px;
+}
+
+.trade-page-order-input-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 27%;
+    height: 50%;
+    margin-bottom: 4%;
+    overflow: hidden;
+}
+
+.trade-page-input{
+    background-color: #0b0b0d;
+    border: 1px solid #1e1e24;
+    height: 50%;
+    width: 100%;
+    border-radius: 5px;
+    color: rgb(229, 231, 235);
+    padding-left: 1%;
+    font-size: 130%;
+}
+
+.trade-page-input:focus{
+    outline: none;
+    border: 1px solid #22c55e;
+}
+
+.trade-page-input-label{
+    color: #4b5563;
+    font-size: 110%;
+    font-weight: 500;
+    height: 10%;
+    margin-top: 3%;
+}
+
+.trade-page-order-button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 25%;
+    width: 12%;
+    margin-bottom: 4%;
+}
+
+.trade-page-order-button{
+    height: 100%;
+    width: 45%;
+}
+
+.trade-page-buy-order-button{
+    background-color: rgba(34, 197, 94, 0.08);
+    border: 1px solid #22c55e;
+    color: #22c55e;
+    border-radius: 5px;
+}
+
+.trade-page-sell-order-button{
+    background-color: rgba(239, 68, 68, 0.08);
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    border-radius: 5px;
+}
