@@ -146,6 +146,7 @@ export async function getUserSnapshots(userID){
         return snapshots.rows;
     } catch(error){
         console.log('Error in getUserSnapshots: ', error);
+        throw error;
     }
 }
 
@@ -158,6 +159,7 @@ export async function getCurrentUserValue(userID){
         return currentValue.rows[0].portfolio_value;
     } catch(error){
         console.log('Error in getCurrentUserValue', error);
+        throw error;
     }
 }
 
@@ -234,7 +236,7 @@ export async function getCurrentUserBalance(userID){
             `SELECT balance FROM users WHERE id = $1`,
             [userID]
         );
-        return userBalance.rows[0];
+        return userBalance.rows[0].balance;
     } catch(error){
         console.log('Error in getCurrentUserBalance: ', error);
         throw error;

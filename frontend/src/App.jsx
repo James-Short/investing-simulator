@@ -12,12 +12,13 @@ import TradePage from './pages/TradePage/TradePage.jsx'
 function App() {
   const [sessionStatus, setSessionStatus] = useState('');
   const [selectedTab, setSelectedTab] = useState('portfolio');
-  const [userHoldings, setUserHoldings] = useState({});
+  const [userHoldings, setUserHoldings] = useState([]);
   const [userSnapshots, setUserSnapshots] = useState([]);
   const [userWatchlist, setUserWatchlist] = useState([]);
   const [currentUserValue, setCurrentUserValue] = useState();
   const [currentStocks, setCurrentStocks] = useState([]);
   const [openingPrices, setOpeningPrices] = useState([]);
+  const [currentUserBalance, setCurrentUserBalance] = useState();
   
   const stockMap = useMemo(() => {
     return Object.fromEntries(currentStocks.map(stock => [stock.symbol, stock.last_trade]));
@@ -49,6 +50,7 @@ function App() {
         setUserWatchlist(homepageData.data.userWatchlist);
         setCurrentStocks(homepageData.data.currentStocks);
         setOpeningPrices(homepageData.data.openingPrices);
+        setCurrentUserBalance(homepageData.data.currentUserBalance);
     }
     if(sessionStatus === 'active'){
       getData();
@@ -57,7 +59,7 @@ function App() {
 
   async function getUserHoldings(){
     const updatedHoldings = await axios.get('http://localhost:8080/users/getUserHoldings', {withCredentials: true, validateStatus: () => true});
-    setUserHoldings(updatedHoldings);
+    setUserHoldings(updatedHoldings.data.userHoldings);
   }
 
   async function submitOrder(orderType, symbol, quantity){
@@ -80,8 +82,8 @@ function App() {
       {sessionStatus === 'active' ?
         <>
           <Navbar selected={selectedTab} setSelectedTab={(tab) => setSelectedTab(tab)}/>
-            {selectedTab === 'portfolio' ? <HomePage userHoldings={userHoldings} userSnapshots={userSnapshots} currentUserValue={currentUserValue} stockMap={stockMap} openingPriceMap={openingPriceMap}/>:
-              selectedTab === 'explore' ? <ExplorePage userWatchlist={userWatchlist} currentStocks={currentStocks} stockMap={stockMap} openingPriceMap={openingPriceMap}/> : <TradePage submitOrder={(orderType, symbol, quantity) => submitOrder(orderType, symbol, quantity)}/>}</>: <>
+            {selectedTab === 'portfolio' ? <HomePage userHoldings={userHoldings} userSnapshots={userSnapshots} currentUserValue={currentUserValue} stockMap={stockMap} openingPriceMap={openingPriceMap} currentUserBalance={currentUserBalance}/>:
+              selectedTab === 'explore' ? <ExplorePage userWatchlist={userWatchlist} currentStocks={currentStocks} stockMap={stockMap} openingPriceMap={openingPriceMap}/> : <TradePage submitOrder={(orderType, symbol, quantity) => submitOrder(orderType, symbol, quantity)} userHoldings={userHoldings} currentUserBalance={currentUserBalance} stockMap={stockMap}/>}</>: <>
         </>      
       }
       {sessionStatus === 'inactive' ?

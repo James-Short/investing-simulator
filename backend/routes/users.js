@@ -121,12 +121,13 @@ userRouter.get('/getUserHomepage', async (req, res) => {
         }
 
         const userHoldings = await getUserHoldings(userID);
+        const currentUserBalance = await getCurrentUserBalance(userID);
         const userSnapshots = await getUserSnapshots(userID);
         const currentUserValue = await getCurrentUserValue(userID);
         const userWatchlist = await getUserWatchlist(userID);
         const currentStocks = await getCurrentPrices();
         res.status(200).send(JSON.stringify({ userHoldings: userHoldings, userSnapshots: userSnapshots, currentUserValue: currentUserValue, userWatchlist: userWatchlist,
-            currentStocks: currentStocks, openingPrices: openingPrices
+            currentStocks: currentStocks, openingPrices: openingPrices, currentUserBalance: currentUserBalance
          }));
     } catch(error){
         console.log(error);
