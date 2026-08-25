@@ -1,7 +1,7 @@
 import express from 'express';
 import argon2 from 'argon2';
 
-import { createCookie, createUser, createUserPosition, deleteUserPosition, getCurrentIndividualPrice, getCurrentPrices, getCurrentUserBalance, getCurrentUserValue, getSessionOwner, getUser, getUserHoldings, getUserSnapshots, getUserWatchlist, subtractFromUserBalance, verifyCookieExists } from '../db/queries.js';
+import { addToUserBalance, createCookie, createUser, createUserPosition, deleteUserPosition, getCurrentIndividualPrice, getCurrentPrices, getCurrentUserBalance, getCurrentUserValue, getSessionOwner, getUser, getUserHoldings, getUserSnapshots, getUserWatchlist, subtractFromUserBalance, updateInitialSnapshot, verifyCookieExists } from '../db/queries.js';
 import { openingPrices } from '../crons/cronJobs.js';
 
 export const userRouter = express.Router();
@@ -13,8 +13,9 @@ userRouter.post('/createUser', async (req, res) => {
         console.log(username, password)
         const hashedPassword = await argon2.hash(password);
         await createUser(username, hashedPassword);
-
         const cookieValue = await createCookie(username);
+        const userID = await getSessionOwner(cookieValue);
+        await updateInitialSnapshot(userID);
         res.cookie('session', cookieValue, {
             maxAge: 604800000,
             httpOnly: true,
@@ -78,6 +79,29 @@ userRouter.get('/verifySession', async (req, res) => {
     }
 });
 
+userRouter.get('/getUserHoldings', async (req, res) => {
+    try{
+        const userCookie = req.cookies['session'];
+        if(!userCookie){
+            res.status(404).send('Session not found!');
+            return;
+        }
+        const cookieExists = await verifyCookieExists(userCookie);
+        if(!cookieExists){
+            res.status(404).send('Session not found!');
+            return;
+        }
+        const userID = await getSessionOwner(userCookie);
+        if(!userID){
+            res.status(404).send('Session not found!');
+        }
+        const userHoldings = await getUserHoldings(userID);
+        res.status(200).send(JSON.stringify({ userHoldings: userHoldings }));
+    } catch(error){
+        console.log(error);
+    }
+});
+
 userRouter.get('/getUserHomepage', async (req, res) => {
     try{
         //We need portfolio value, the user's snapshots, their watchlist, their holdings, and all current prices.
@@ -101,7 +125,7 @@ userRouter.get('/getUserHomepage', async (req, res) => {
         const currentUserValue = await getCurrentUserValue(userID);
         const userWatchlist = await getUserWatchlist(userID);
         const currentStocks = await getCurrentPrices();
-        res.status(200).send(JSON.stringify({ userHoldings: userHoldings, userSnapshots, userSnapshots, currentUserValue: currentUserValue, userWatchlist: userWatchlist,
+        res.status(200).send(JSON.stringify({ userHoldings: userHoldings, userSnapshots: userSnapshots, currentUserValue: currentUserValue, userWatchlist: userWatchlist,
             currentStocks: currentStocks, openingPrices: openingPrices
          }));
     } catch(error){
@@ -149,8 +173,7 @@ userRouter.post('/buyStock', async (req, res) => {
         
         await subtractFromUserBalance(userID, stockPrice * quantity);
         await createUserPosition(userID, symbol, quantity);
-
-
+        res.status(200).send();
 
     } catch(error){
         console.log(error);
@@ -182,8 +205,8 @@ userRouter.post('/sellStock', async (req, res) => {
         }
         const sellValue = await getCurrentIndividualPrice(symbol) * quantity;
         await deleteUserPosition(userID, symbol, quantity);
-        console.log(sellValue);
-
+        await addToUserBalance(userID, sellValue);
+        res.status(200).send();
     } catch(error){
         console.log(error);
     }

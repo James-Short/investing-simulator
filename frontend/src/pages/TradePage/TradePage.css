@@ -43,7 +43,7 @@
     width: 100%;
     border-radius: 5px;
     color: rgb(229, 231, 235);
-    padding-left: 1%;
+    padding-left: 3%;
     font-size: 130%;
 }
 
@@ -72,6 +72,15 @@
 .trade-page-order-button{
     height: 100%;
     width: 45%;
+}
+
+.trade-page-order-button:hover{
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.trade-page-order-button:active{
+    opacity: 0.5;
 }
 
 .trade-page-buy-order-button{

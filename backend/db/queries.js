@@ -56,8 +56,6 @@ export async function createUser(username, hashedPassword){
             `INSERT INTO users (username, password_hash) VALUES ($1, $2)`,
             [username, hashedPassword]
         );
-        await updateInitialSnapshot();
-
     } catch(error){
         console.log('Error in createUser: ', error);
         throw error;
