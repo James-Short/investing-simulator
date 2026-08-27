@@ -11,7 +11,7 @@ function HomePage({ userHoldings, userSnapshots=[], currentUserValue=0, stockMap
             <div className='home-page-stats-container'>
                 <StatsBadge height='100%' width='23%' header='PORTFOLIO VALUE' data={'$' + currentUserValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} dataColor='white' footer='-------'/>
                 <StatsBadge height='100%' width='23%' header='CASH BALANCE' data={'$' + currentUserBalance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} dataColor='white' footer={'-------'}/>
-                <StatsBadge height='100%' width='23%' header='TOTAL P&L' data={'$' + (currentUserValue - 10000).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} dataColor='#20b657' footer={`${currentUserValue > 10000 ? '+' : ''}` + ((currentUserValue - 10000)/100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + '%'}/>
+                <StatsBadge height='100%' width='23%' header='TOTAL P&L' data={`${(currentUserBalance >= 10000) ? '+' : '-'}` + '$' + Math.abs((currentUserValue - 10000).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}))} dataColor={currentUserBalance > 10000 ? '#20b657' : 'tomato'} footer={`${currentUserValue > 10000 ? '+' : ''}` + ((currentUserValue - 10000)/100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + '%'}/>
                 <StatsBadge height='100%' width='23%' header='OPEN POSITIONS' data={Object.keys(userHoldings).length} dataColor='white' footer={`${Object.keys(userHoldings).length} tickers`}/>
             </div>
             <div className='home-page-graph-container'>
@@ -42,7 +42,7 @@ function HomePage({ userHoldings, userSnapshots=[], currentUserValue=0, stockMap
                                     <th scope='row'>${(holding.avg_cost).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</th>
                                     <th scope='row' style={{color: 'white'}}>${(stockMap[holding.symbol]).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</th>
                                     <th scope='row' style={{color: 'white'}}>${(holding.quantity * stockMap[holding.symbol]).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</th>
-                                    <th scope='row' style={{color: `${isPositive ? '#20b657' : 'tomato'}`}}>{isPositive ? '+' : ''}${((stockMap[holding.symbol] - holding.avg_cost) * holding.quantity).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</th>
+                                    <th scope='row' style={{color: `${isPositive ? '#20b657' : 'tomato'}`}}>{isPositive ? '+' : '-'}${Math.abs(((stockMap[holding.symbol] - holding.avg_cost) * holding.quantity).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}))}</th>
                                     <th scope='row' style={{color: `${isPositive ? '#20b657' : 'tomato'}`}}>{isPositive ? '+' : ''}{(((stockMap[holding.symbol] - holding.avg_cost)/holding.avg_cost) * 100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%</th>
                                 </tr>
                             );

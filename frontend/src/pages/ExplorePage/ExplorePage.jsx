@@ -11,7 +11,6 @@ function ExplorePage({ userWatchlist=[], currentStocks=[], stockMap=[], openingP
                         <thead>
                             <tr>
                                 <th scope='col' style={{ width: '17%' }}>TICKER</th>
-                                <th scope='col' style={{ width: '27%' }}>NAME</th>
                                 <th scope='col' style={{ width: '17%' }}>PRICE</th>
                                 <th scope='col' style={{ width: '17%' }}>CHANGE</th>
                                 <th scope='col' style={{ width: '17%' }}>MKT CAP</th>
@@ -24,7 +23,6 @@ function ExplorePage({ userWatchlist=[], currentStocks=[], stockMap=[], openingP
                                 return(
                                     <tr>
                                         <th scope='row' style={{ color: 'white' }}>{stock.symbol}</th>
-                                        <th scope='row'>Filler</th>
                                         <th scope='row' style={{ color: 'white' }}>${(stock.last_trade).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</th>
                                         <th scope='row' style={{ color: `${isPositive ? '#20b657' : 'tomato'}` }}>{((stock.last_trade - openingPriceMap[stock.symbol]) * 100 / openingPriceMap[stock.symbol]).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%</th>
                                         <th scope='row'>54.2m</th>

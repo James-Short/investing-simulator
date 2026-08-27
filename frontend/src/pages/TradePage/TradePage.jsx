@@ -54,7 +54,7 @@ function TradePage({ submitOrder, userHoldings=[], currentUserBalance=0, stockMa
                                         <th scope='row'>${(holding.avg_cost).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</th>
                                         <th scope='row' style={{color: 'white'}}>${(stockMap[holding.symbol]).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</th>
                                         <th scope='row' style={{color: 'white'}}>${(holding.quantity * stockMap[holding.symbol]).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</th>
-                                        <th scope='row' style={{color: `${isPositive ? '#20b657' : 'tomato'}`}}>{isPositive ? '+' : ''}${((stockMap[holding.symbol] - holding.avg_cost) * holding.quantity).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</th>
+                                        <th scope='row' style={{color: `${isPositive ? '#20b657' : 'tomato'}`}}>{isPositive ? '+' : '-'}${Math.abs(((stockMap[holding.symbol] - holding.avg_cost) * holding.quantity).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}))}</th>
                                         <th scope='row' style={{color: `${isPositive ? '#20b657' : 'tomato'}`}}>{isPositive ? '+' : ''}{(((stockMap[holding.symbol] - holding.avg_cost)/holding.avg_cost) * 100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%</th>
                                     </tr>
                                 );
