@@ -1,12 +1,20 @@
+import { useEffect, useState } from 'react';
 import WatchlistStock from '../../components/WatchlistStock/WatchlistStock';
 import './ExplorePage.css';
 
 function ExplorePage({ userWatchlist=[], currentStocks=[], stockMap=[], openingPriceMap=[], toggleStockWatch }){
+    const [filterInput, setFilterInput] = useState('');
+    const [filteredStocks, setFilteredStocks] = useState();
+
+    useEffect(() => {
+        setFilteredStocks(currentStocks.filter((stock) => stock.symbol.toLowerCase().includes(filterInput.toLowerCase())));
+    }, [filterInput])
+
     return(
         <div className='explore-page'>
             <div className='explore-page-center-container'>
                 <div className='explore-page-main-container'>
-                    <input type="text" className='explore-page-search-input' placeholder='Search ticker or name'/>
+                    <input type="text" className='explore-page-search-input' placeholder='Search ticker or name' onChange={(e) => setFilterInput(e.target.value)}/>
                     <table className='explore-page-stock-table'>
                         <thead>
                             <tr>
@@ -17,7 +25,7 @@ function ExplorePage({ userWatchlist=[], currentStocks=[], stockMap=[], openingP
                             </tr>
                         </thead>
                         <tbody>
-                            {currentStocks.map((stock) => {
+                            {filteredStocks.map((stock) => {
                                 const isPositive = (stock.last_trade >= openingPriceMap[stock.symbol]);
                                 return(
                                     <tr>
