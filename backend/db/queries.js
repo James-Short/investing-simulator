@@ -325,3 +325,24 @@ export async function deleteUserPosition(userID, symbol, quantity){
         throw error;
     }
 }
+
+export async function toggleUserStockWatch(userID, symbol){
+    try{
+        const currentWatchlist = await getUserWatchlist(userID);
+        if(Object.values(currentWatchlist).includes(symbol)){
+            await pool.query(
+                `UPDATE users SET watchlist = array_remove(watchlist, $1) WHERE id = $2`,
+                [symbol, userID]
+            );
+        }
+        else{
+            await pool.query(
+                `UPDATE users SET watchlist = array_append(watchlist, $1) WHERE id = $2`,
+                [symbol, userID]
+            );
+        }
+    } catch(error){
+        console.log('Error in toggleUserStockWatch: ', error);
+        throw error;
+    }
+}

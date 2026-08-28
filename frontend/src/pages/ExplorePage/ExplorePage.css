@@ -119,6 +119,7 @@
     align-self: flex-start;
     background-color: #111114;
     border-radius: 5px;
+    min-height: 70px;
 }
 
 .explore-page-watchlist-header{
@@ -127,4 +128,10 @@
     color: #6b7280;
     font-weight: 200;
     margin-top: 0;
+}
+
+.explore-page-watchlist-filler{
+    text-align: center;
+    color: #6b7280;
+    font-weight: 100;
 }

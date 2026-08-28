@@ -6,7 +6,7 @@ function WatchlistStock({ name, price, change, height, width, openingPriceMap=[]
             <h3 className='watchlist-stock-header'>{name}</h3>
             <div className='watchlist-stock-right-container'>
                 <h3 className='watchlist-stock-price'>${(price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</h3>
-                <h3 className='watchlist-stock-change'>{((price - openingPriceMap[name]) / 100 * openingPriceMap[name]).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%</h3>
+                <h3 style={{color: `${price >= openingPriceMap[name] ? '#22c55e' : 'tomato'}`}} className='watchlist-stock-change'>{((price - openingPriceMap[name]) * 100 / openingPriceMap[name]).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%</h3>
             </div>
         </div>
     );

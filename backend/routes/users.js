@@ -1,7 +1,7 @@
 import express from 'express';
 import argon2 from 'argon2';
 
-import { addToUserBalance, createCookie, createUser, createUserPosition, deleteUserPosition, getCurrentIndividualPrice, getCurrentPrices, getCurrentUserBalance, getCurrentUserValue, getSessionOwner, getUser, getUserHoldings, getUserSnapshots, getUserWatchlist, subtractFromUserBalance, updateInitialSnapshot, verifyCookieExists } from '../db/queries.js';
+import { addToUserBalance, createCookie, createUser, createUserPosition, deleteUserPosition, getCurrentIndividualPrice, getCurrentPrices, getCurrentUserBalance, getCurrentUserValue, getSessionOwner, getUser, getUserHoldings, getUserSnapshots, getUserWatchlist, subtractFromUserBalance, toggleUserStockWatch, updateInitialSnapshot, verifyCookieExists } from '../db/queries.js';
 import { openingPrices } from '../crons/cronJobs.js';
 
 export const userRouter = express.Router();
@@ -210,5 +210,33 @@ userRouter.post('/sellStock', async (req, res) => {
         res.status(200).send();
     } catch(error){
         console.log(error);
+    }
+});
+
+userRouter.post('/toggleStockWatch', async (req, res) => {
+    try{
+         const userCookie = req.cookies['session'];
+        if(!userCookie){
+            res.status(404).send('Session not found!');
+            return;
+        }
+        const cookieExists = await verifyCookieExists(userCookie);
+        if(!cookieExists){
+            res.status(404).send('Session not found!');
+            return;
+        }
+        const userID = await getSessionOwner(userCookie);
+        if(!userID){
+            res.status(404).send('Session not found!');
+            return;
+        }
+
+        const { symbol } = req.body;
+
+        await toggleUserStockWatch(userID, symbol);
+        res.status(200).send();
+
+    } catch(error){
+
     }
 });

@@ -77,13 +77,17 @@ function App() {
     }
   }
 
+  async function toggleStockWatch(symbol){
+    const res = await axios.post('http://localhost:8080/users/toggleStockWatch', {symbol: symbol}, {withCredentials: true, validateStatus: () => true});
+  }
+
   return (
     <>
       {sessionStatus === 'active' ?
         <>
           <Navbar selected={selectedTab} setSelectedTab={(tab) => setSelectedTab(tab)}/>
             {selectedTab === 'portfolio' ? <HomePage userHoldings={userHoldings} userSnapshots={userSnapshots} currentUserValue={currentUserValue} stockMap={stockMap} openingPriceMap={openingPriceMap} currentUserBalance={currentUserBalance}/>:
-              selectedTab === 'explore' ? <ExplorePage userWatchlist={userWatchlist} currentStocks={currentStocks} stockMap={stockMap} openingPriceMap={openingPriceMap}/> : <TradePage submitOrder={(orderType, symbol, quantity) => submitOrder(orderType, symbol, quantity)} userHoldings={userHoldings} currentUserBalance={currentUserBalance} stockMap={stockMap}/>}</>: <>
+              selectedTab === 'explore' ? <ExplorePage userWatchlist={userWatchlist} currentStocks={currentStocks} stockMap={stockMap} openingPriceMap={openingPriceMap} toggleStockWatch={(symbol) => toggleStockWatch(symbol)}/> : <TradePage submitOrder={(orderType, symbol, quantity) => submitOrder(orderType, symbol, quantity)} userHoldings={userHoldings} currentUserBalance={currentUserBalance} stockMap={stockMap}/>}</>: <>
         </>      
       }
       {sessionStatus === 'inactive' ?
