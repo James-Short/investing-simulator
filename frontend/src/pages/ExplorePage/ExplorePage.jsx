@@ -4,7 +4,7 @@ import './ExplorePage.css';
 
 function ExplorePage({ userWatchlist=[], currentStocks=[], stockMap=[], openingPriceMap=[], toggleStockWatch }){
     const [filterInput, setFilterInput] = useState('');
-    const [filteredStocks, setFilteredStocks] = useState();
+    const [filteredStocks, setFilteredStocks] = useState([]);
 
     useEffect(() => {
         setFilteredStocks(currentStocks.filter((stock) => stock.symbol.toLowerCase().includes(filterInput.toLowerCase())));
