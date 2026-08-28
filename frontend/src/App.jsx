@@ -81,11 +81,28 @@ function App() {
     const res = await axios.post('http://localhost:8080/users/toggleStockWatch', {symbol: symbol}, {withCredentials: true, validateStatus: () => true});
   }
 
+  async function getStatus(){
+    const res = await axios.get('http://localhost:8080/users/verifySession', {withCredentials: true, validateStatus: () => true});
+    if(res.status === 200){
+      setSessionStatus('active');
+    }
+    else{
+      setSessionStatus('inactive');
+    }
+  }
+
+  async function signOut(){
+    const res = await axios.get('http://localhost:8080/users/signout', {withCredentials: true, validateStatus: () => true});
+    if(res.status === 200){
+      await getStatus();
+    }
+  }
+
   return (
     <>
       {sessionStatus === 'active' ?
         <>
-          <Navbar selected={selectedTab} setSelectedTab={(tab) => setSelectedTab(tab)}/>
+          <Navbar selected={selectedTab} setSelectedTab={(tab) => setSelectedTab(tab)} signOut={() => signOut()}/>
             {selectedTab === 'portfolio' ? <HomePage userHoldings={userHoldings} userSnapshots={userSnapshots} currentUserValue={currentUserValue} stockMap={stockMap} openingPriceMap={openingPriceMap} currentUserBalance={currentUserBalance}/>:
               selectedTab === 'explore' ? <ExplorePage userWatchlist={userWatchlist} currentStocks={currentStocks} stockMap={stockMap} openingPriceMap={openingPriceMap} toggleStockWatch={(symbol) => toggleStockWatch(symbol)}/> : <TradePage submitOrder={(orderType, symbol, quantity) => submitOrder(orderType, symbol, quantity)} userHoldings={userHoldings} currentUserBalance={currentUserBalance} stockMap={stockMap}/>}</>: <>
         </>      

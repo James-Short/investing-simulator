@@ -1,6 +1,6 @@
 import './Navbar.css';
 
-function Navbar({ selected, setSelectedTab }){
+function Navbar({ selected, setSelectedTab, signOut }){
     return(
         <div className='navbar'>
             <div className='navbar-center'>
@@ -10,7 +10,7 @@ function Navbar({ selected, setSelectedTab }){
                     <button className={`navbar-select-button ${selected === 'explore' ? 'navbar-select-button-selected' : ''}`} onClick={() => setSelectedTab('explore')}>EXPLORE</button>
                     <button className={`navbar-select-button ${selected === 'trade' ? 'navbar-select-button-selected' : ''}`} onClick={() => setSelectedTab('trade')}>TRADE</button>
                 </div>
-                <button className='navbar-sign-out-button'>SIGN OUT</button>
+                <button className='navbar-sign-out-button' onClick={() => signOut()}>SIGN OUT</button>
             </div>
         </div>
     )

@@ -346,3 +346,15 @@ export async function toggleUserStockWatch(userID, symbol){
         throw error;
     }
 }
+
+export async function deleteUserSession(cookieValue){
+    try{
+        await pool.query(
+          `DELETE FROM sessions WHERE session_id = $1`,
+          [cookieValue]
+        );
+    } catch(error){
+        console.log('Error in deleteUserCookie: ', error);
+        throw error;
+    }
+}

@@ -1,7 +1,7 @@
 import express from 'express';
 import argon2 from 'argon2';
 
-import { addToUserBalance, createCookie, createUser, createUserPosition, deleteUserPosition, getCurrentIndividualPrice, getCurrentPrices, getCurrentUserBalance, getCurrentUserValue, getSessionOwner, getUser, getUserHoldings, getUserSnapshots, getUserWatchlist, subtractFromUserBalance, toggleUserStockWatch, updateInitialSnapshot, verifyCookieExists } from '../db/queries.js';
+import { addToUserBalance, createCookie, createUser, createUserPosition, deleteUserPosition, deleteUserSession, getCurrentIndividualPrice, getCurrentPrices, getCurrentUserBalance, getCurrentUserValue, getSessionOwner, getUser, getUserHoldings, getUserSnapshots, getUserWatchlist, subtractFromUserBalance, toggleUserStockWatch, updateInitialSnapshot, verifyCookieExists } from '../db/queries.js';
 import { openingPrices } from '../crons/cronJobs.js';
 
 export const userRouter = express.Router();
@@ -238,5 +238,16 @@ userRouter.post('/toggleStockWatch', async (req, res) => {
 
     } catch(error){
 
+    }
+});
+
+userRouter.get('/signout', async(req, res) => {
+    try{
+        const userCookie = req.cookies['session'];
+        await deleteUserSession(userCookie);
+        res.clearCookie('session');
+        res.status(200).send();
+    } catch(error){
+        console.log(error);
     }
 });
