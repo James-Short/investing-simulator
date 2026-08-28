@@ -96,6 +96,11 @@ function App() {
 
   async function toggleStockWatch(symbol){
     const res = await axios.post('http://localhost:8080/users/toggleStockWatch', {symbol: symbol}, {withCredentials: true, validateStatus: () => true});
+    if(res.status === 200){
+      const updatedWatchlist = await axios.get('http://localhost:8080/users/getUserWatchlist', {withCredentials: true, validateStatus: () => true});
+      console.log(updatedWatchlist.data);
+      setUserWatchlist(updatedWatchlist.data.userWatchlist);
+    }
   }
 
   async function getStatus(){

@@ -102,6 +102,29 @@ userRouter.get('/getUserHoldings', async (req, res) => {
     }
 });
 
+userRouter.get('/getUserWatchlist', async (req, res) => {
+    try{
+        const userCookie = req.cookies['session'];
+        if(!userCookie){
+            res.status(404).send('Session not found!');
+            return;
+        }
+        const cookieExists = await verifyCookieExists(userCookie);
+        if(!cookieExists){
+            res.status(404).send('Session not found!');
+            return;
+        }
+        const userID = await getSessionOwner(userCookie);
+        if(!userID){
+            res.status(404).send('Session not found!');
+        }
+        const userWatchlist = await getUserWatchlist(userID);
+        res.status(200).send(JSON.stringify({ userWatchlist: userWatchlist }));
+    } catch(error){
+        console.log(error);
+    }
+});
+
 userRouter.get('/getUserHomepage', async (req, res) => {
     try{
         //We need portfolio value, the user's snapshots, their watchlist, their holdings, and all current prices.

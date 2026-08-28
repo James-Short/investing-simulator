@@ -1,4 +1,4 @@
-const connections = []
+let connections = []
 
 export function addConnection(ws){
     connections.push(ws);
