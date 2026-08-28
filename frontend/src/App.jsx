@@ -6,7 +6,7 @@ import AuthPage from './pages/AuthPage/AuthPage.jsx'
 import HomePage from './pages/HomePage/HomePage.jsx'
 import Navbar from './components/Navbar/Navbar.jsx'
 import ExplorePage from './pages/ExplorePage/ExplorePage.jsx'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useRef } from 'react'
 import TradePage from './pages/TradePage/TradePage.jsx'
 
 function App() {
@@ -19,6 +19,7 @@ function App() {
   const [currentStocks, setCurrentStocks] = useState([]);
   const [openingPrices, setOpeningPrices] = useState([]);
   const [currentUserBalance, setCurrentUserBalance] = useState();
+  const ws = useRef(null);
   
   const stockMap = useMemo(() => {
     return Object.fromEntries(currentStocks.map(stock => [stock.symbol, stock.last_trade]));
@@ -33,6 +34,22 @@ function App() {
       const res = await axios.get('http://localhost:8080/users/verifySession', {withCredentials: true, validateStatus: () => true});
       if(res.status === 200){
         setSessionStatus('active');
+
+        const socket = new WebSocket('ws://localhost:8080');
+        ws.current = socket;
+        
+        socket.onmessage = async (message) => {
+          const data = JSON.parse(message.data);
+          if(data.type === 'dataReady'){
+            console.log('Got data ready');
+            const homepageData = await axios.get('http://localhost:8080/users/getUserHomepage', {withCredentials: true, validateStatus: () => true});
+            setUserSnapshots(homepageData.data.userSnapshots);
+            setCurrentUserValue(homepageData.data.currentUserValue);
+            setCurrentStocks(homepageData.data.currentStocks);
+            setCurrentUserBalance(homepageData.data.currentUserBalance);
+          }
+        }
+
       }
       else{
         setSessionStatus('inactive');
