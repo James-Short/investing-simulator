@@ -84,18 +84,24 @@ function App() {
     const updatedHoldings = await axios.get('http://localhost:8080/users/getUserHoldings', {withCredentials: true, validateStatus: () => true});
     setUserHoldings(updatedHoldings.data.userHoldings);
   }
+  async function getUserBalance(){
+    const updatedBalance = await axios.get('http://localhost:8080/users/getUserBalance', {withCredentials: true, validateStatus: () => true});
+    setCurrentUserBalance(updatedBalance.data.userBalance);
+  }
 
   async function submitOrder(orderType, symbol, quantity){
     if(orderType === 'buy'){
       const res = await axios.post('http://localhost:8080/users/buyStock', {symbol: symbol, quantity: quantity}, {withCredentials: true, validateStatus: () => true});
       if(res.status === 200){
         getUserHoldings();
+        getUserBalance();
       }
     }
     else if(orderType === 'sell'){
       const res = await axios.post('http://localhost:8080/users/sellStock', {symbol: symbol, quantity: quantity}, {withCredentials: true, validateStatus: () => true});
       if(res.status === 200){
         getUserHoldings();
+        getUserBalance();
       }
     }
   }
