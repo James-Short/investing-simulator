@@ -22,12 +22,18 @@ function App() {
   const ws = useRef(null);
   
   const stockMap = useMemo(() => {
-    return Object.fromEntries(currentStocks.map(stock => [stock.symbol, stock.last_trade]));
+    if(currentStocks){
+      return Object.fromEntries(currentStocks.map(stock => [stock.symbol, stock.last_trade]));
+    }
+    return undefined;
   }, [currentStocks]);
 
   const openingPriceMap = useMemo(() => {
-    return Object.fromEntries(openingPrices.map(stock => [stock.symbol, stock.last_trade]))
-  });
+    if(currentStocks){
+      return Object.fromEntries(openingPrices.map(stock => [stock.symbol, stock.last_trade]));
+    }
+    return undefined;
+  }, [openingPrices]);
 
   useEffect(() => {
     async function getStatus(){

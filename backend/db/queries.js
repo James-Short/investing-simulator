@@ -140,7 +140,7 @@ export async function getUserHoldings(userID){
 export async function getUserSnapshots(userID){
     try{
         const snapshots = await pool.query(
-            `SELECT portfolio_value, recorded_at FROM portfolio_snapshots WHERE user_id = $1`,
+            `SELECT portfolio_value, recorded_at FROM portfolio_snapshots WHERE user_id = $1 ORDER BY recorded_at`,
             [userID]
         );
         return snapshots.rows;
