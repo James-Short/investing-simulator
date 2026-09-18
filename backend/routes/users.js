@@ -250,12 +250,20 @@ userRouter.post('/sellStock', async (req, res) => {
             res.status(400).send('Missing required information.');
             return;
         }
+
+        const stockPrice = await getCurrentIndividualPrice(symbol);
+        if(!stockPrice){
+            res.status(404).send('Could not find requested symbol');
+            return;
+        }
+
         const sellValue = await getCurrentIndividualPrice(symbol) * quantity;
         await deleteUserPosition(userID, symbol, quantity);
         await addToUserBalance(userID, sellValue);
         res.status(200).send();
     } catch(error){
         console.log(error);
+        res.status(422).send();
     }
 });
 

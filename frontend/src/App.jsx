@@ -96,12 +96,24 @@ function App() {
         getUserHoldings();
         getUserBalance();
       }
+      else if(res.status === 422){
+        alert('Your balance is lower than the price of the order you are attempting to make.');
+      }
+      else if(res.status === 404){
+        alert('The symbol in your order was not found.');
+      }
     }
     else if(orderType === 'sell'){
       const res = await axios.post('http://localhost:8080/users/sellStock', {symbol: symbol, quantity: quantity}, {withCredentials: true, validateStatus: () => true});
       if(res.status === 200){
         getUserHoldings();
         getUserBalance();
+      }
+      else if(res.status === 422){
+        alert('You attempted to sell more shares of your listed stock than you own.');
+      }
+      else if(res.status === 404){
+        alert('The symbol in your order was not found.');
       }
     }
   }
