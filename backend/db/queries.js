@@ -4,17 +4,31 @@ import { randomUUID } from 'crypto';
 
 export async function updatePrices(stocks){
     try{
-        for(const [symbol, trade] of Object.entries(stocks)){
-            await pool.query(
-                `INSERT INTO stocks (symbol, time, last_trade) VALUES ($1, $2, $3)`,
-                [symbol, trade.t, trade.p]
+        const entries = Object.entries(stocks);
+
+        const values = []
+        const placeholders = []
+
+        entries.forEach(([symbol, trade], i) => {
+            const offset = i * 3;
+
+            placeholders.push(
+                `($${offset + 1}, $${offset + 2}, $${offset + 3})`
             );
-        }
+
+            values.push(symbol, trade.t, trade.p);
+        });
+
+        await pool.query(
+            `INSERT INTO stocks (symbol, time, last_trade)
+            VALUES ${placeholders.join(", ")}`,
+            values
+        );
+
     } catch(error){
         console.log('Error in updatePrices: ', error);
         throw error;
     }
-    
 }
 
 export async function getCurrentPrices(){

@@ -8,10 +8,9 @@ export let openingPrices = [];
 
 
 try{
+    //Roughly 40 second delay in awaiting fetchPrices()
     await fetchPrices();
-
     openingPrices = await getOpeningPrices();
-
     cron.schedule('30 9 * * 1-5', async () => await getOpeningPrices(), { timezone: 'America/New_York' });
     cron.schedule('*/1 * * * *', async () => { await fetchPrices(); await updateUserSnapshots(); announceDataReady()}, { timezone: 'America/New_York' });
 } catch(error){
