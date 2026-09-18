@@ -6,6 +6,8 @@ import './HomePage.css';
 
 
 function HomePage({ userHoldings, userSnapshots=[], currentUserValue=0, stockMap=[], openingPriceMap=[], currentUserBalance=0 }){
+
+
     return(
         <div className='home-page'>
             <div className='home-page-stats-container'>

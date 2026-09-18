@@ -1,24 +1,43 @@
 import { AreaChart, ResponsiveContainer, XAxis, YAxis, Area, Label, Tooltip } from 'recharts';
 import './ValueGraph.css';
 
-function ValueGraph({ height, width, data=[] }){
-    const data1 = [
-        { date: '2026-01-01', price: 142.50 },
-        { date: '2026-01-08', price: 145.20 },
-        { date: '2026-01-15', price: 139.80 },
-        { date: '2026-01-22', price: 151.30 },
-        { date: '2026-01-29', price: 148.90 },
-        { date: '2026-02-05', price: 156.40 },
-        { date: '2026-02-12', price: 153.10 },
-        { date: '2026-02-19', price: 160.75 },
-        { date: '2026-02-26', price: 158.20 },
-        { date: '2026-03-05', price: 165.60 },
-        { date: '2026-03-12', price: 162.30 },
-        { date: '2026-03-19', price: 170.90 },
-    ];
+function ValueGraph({ height, width, data }){
+    if(Object.values(data).length === 0){
+        return null;
+    }
 
-    const formatter = new Intl.NumberFormat('en-US', {notation: 'compact', compactDisplay: 'short'})
+    function getDateFormat(spanMs){
+        const hour = 60 * 60 * 1000;
+        const day = 24 * hour;
 
+        if(spanMs > 90 * day){
+            return{
+                format: date =>
+                    date.toLocaleString('en-US', {month: 'short'}),
+            };
+        }
+        if(spanMs > 7 * day){
+            return{
+                format: date =>
+                    date.toLocaleString('en-US', {month: 'short', day: 'numeric'}),
+            };
+        }
+        if(spanMs > day){
+            return{
+                format: date =>
+                    date.toLocaleString('en-US', {weekday: 'short', day: 'numeric'}),
+            };
+        }
+        return{
+            format: date =>
+                date.toLocaleString('en-US', {hour: 'numeric', minute: '2-digit'}),
+        }
+    }
+
+    const formatter = new Intl.NumberFormat('en-US', {notation: 'compact', compactDisplay: 'short'});
+    const values = Object.values(data);
+    const { format } = getDateFormat(new Date(values[values.length - 1].recorded_at).getTime() -
+                     new Date(values[0].recorded_at).getTime());
     return(
         <ResponsiveContainer width={width} height={height}>
             <AreaChart data={data}>
@@ -29,7 +48,7 @@ function ValueGraph({ height, width, data=[] }){
                     </linearGradient>
                 </defs>
                 <XAxis dataKey='recorded_at' axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} interval='preserveStartEnd' fontSize='90%'
-                    tickFormatter={(date) => new Date(date).toLocaleString('en-US', {month: 'short', day: 'numeric'})}
+                    tickFormatter={(date) => format(new Date(date))}
                 />
                 <YAxis dataKey='portfolio_value' axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} fontSize='90%' 
                     domain={[(dataMin) => Math.floor(dataMin * 0.98), (dataMax) => Math.ceil(dataMax * 1.02)]}
